@@ -24,6 +24,7 @@ class Shell_Abstract_Boilerplate extends Mage_Shell_Abstract
   {
     parent::__construct();
     $this->startTime = microtime(true);
+    $this->log($this->startTime);
   }
 
   /**
@@ -119,34 +120,54 @@ USAGE;
   {
     $endTime = microtime(true);
     $executionTime = $endTime - $this->startTime;
-    echo "\n\nScript execution time: " . round($executionTime, 2) . " seconds\n\n";
+    $this->log("\n\nScript execution time: " . round($executionTime, 2) . " seconds\n\n");
   }
 
   /**
    * Prints colored output based on the provided color.
    *
-   * @param string $string The string to be printed
-   * @param string $color The color to be applied (red, yellow, green)
+   * @param string      $message The string to be printed.
+   * @param string|null $color   The color to be applied (red, yellow, green).
+   * @param string|null $level   The log level (optional).
+   * @param string|null $file    The log file (optional).
+   * @param bool        $force   Whether to force logging (optional, default: false).
    */
-  public function log($message, $level = null, $file = null, $force = false , $color = '')
+  public function log($message, $color = null, $level = null, $file = null, $force = false)
   {
     Mage::log($message, $level, $file, $force);
 
+    $coloredMessage = $this->applyColor($message, $color);
+    echo $coloredMessage;
+  }
+
+  /**
+   * Applies the specified color to the message.
+   *
+   * @param string      $message The string to be colored.
+   * @param string|null $color   The color to be applied (red, yellow, green).
+   *
+   * @return string The colored message.
+   */
+  private function applyColor($message, $color)
+  {
     switch ($color) {
       case 'red':
-        echo self::COLOR_RED . $message . self::COLOR_RESET;
+        $coloredMessage = self::COLOR_RED . $message . self::COLOR_RESET;
         break;
       case 'yellow':
-        echo self::COLOR_YELLOW . $message . self::COLOR_RESET;
+        $coloredMessage = self::COLOR_YELLOW . $message . self::COLOR_RESET;
         break;
       case 'green':
-        echo self::COLOR_GREEN . $message . self::COLOR_RESET;
+        $coloredMessage = self::COLOR_GREEN . $message . self::COLOR_RESET;
         break;
       default:
-        echo $message;
+        $coloredMessage = $message;
         break;
     }
+
+    return $coloredMessage;
   }
+
 }
 
 $shell = new Shell_Abstract_Boilerplate();
