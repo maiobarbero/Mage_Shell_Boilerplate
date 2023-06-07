@@ -128,20 +128,22 @@ USAGE;
    * @param string $string The string to be printed
    * @param string $color The color to be applied (red, yellow, green)
    */
-  public function colorOutput($string, $color)
+  public function log($message, $level = null, $file = null, $force = false , $color = '')
   {
+    Mage::log($message, $level, $file, $force);
+
     switch ($color) {
       case 'red':
-        echo self::COLOR_RED . $string . self::COLOR_RESET;
+        echo self::COLOR_RED . $message . self::COLOR_RESET;
         break;
       case 'yellow':
-        echo self::COLOR_YELLOW . $string . self::COLOR_RESET;
+        echo self::COLOR_YELLOW . $message . self::COLOR_RESET;
         break;
       case 'green':
-        echo self::COLOR_GREEN . $string . self::COLOR_RESET;
+        echo self::COLOR_GREEN . $message . self::COLOR_RESET;
         break;
       default:
-        echo $string;
+        echo $message;
         break;
     }
   }
